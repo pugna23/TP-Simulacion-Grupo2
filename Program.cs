@@ -46,6 +46,25 @@ namespace ConsoleApplication1
             }
             //FIN CI
 
+            ejecutarCiclo();
+            
+            //VACIAMIENTO
+            if (NSA==0)
+            {
+                if (NSB==0)
+                {
+                    TPLL = HV;
+                }
+            }
+
+            Console.ReadLine();
+
+        }
+
+        private static void ejecutarCiclo()
+        {
+
+
             while (T < Tf)
             {
                 I = menorTPSA();
@@ -64,14 +83,16 @@ namespace ConsoleApplication1
                         if (r < 0.8)
                         {
                             //JUNIOR
-                            if (NSA <= N)
+                            NSA++;
+
+                            if (NSA < N)
                             {
-                                NSA++;
                                 int j = buscarJunior();
                                 salidaA(j);
                             }
-                            else {
-                                if (NSB==0)
+                            else
+                            {
+                                if (NSB == 0)
                                 {
                                     NSA--;
                                     atiendeLider();
@@ -83,7 +104,8 @@ namespace ConsoleApplication1
                             atiendeLider();
                         }
                     }
-                    else {
+                    else
+                    {
                         eventoSalidaA();
                     }
                 }
@@ -94,7 +116,8 @@ namespace ConsoleApplication1
                     {
                         eventoSalidaA();
                     }
-                    else {
+                    else
+                    {
                         T = TPSB;
                         NSB--;
 
@@ -102,24 +125,26 @@ namespace ConsoleApplication1
                         {
                             salidaB();
                         }
-                        else {
+                        else
+                        {
                             if (NSA > N)
                             {
                                 NSB++;
                                 NSA--;
                                 salidaB();
                             }
-                            else {
-                                TPSB = HV;    
+                            else
+                            {
+                                TPSB = HV;
                             }
                         }
                     }
                 }
             }
-            Console.ReadLine();
-
         }
 
+
+       
         private static int buscarJunior()
         {
             return Array.IndexOf(TPSA, HV);
