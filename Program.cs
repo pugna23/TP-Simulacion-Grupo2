@@ -18,6 +18,8 @@ namespace ConsoleApplication1
         public static Random random{ get; set; }
         public static double r{ get; set; }
         public static TimeSpan Ia{ get; set; }
+        public static TimeSpan TaA { get; set; }
+        public static TimeSpan TaB { get; set; }
         public static int NSB{ get; set; }
         public static int NSA { get; set; }
 
@@ -30,6 +32,8 @@ namespace ConsoleApplication1
             Tf = new TimeSpan(10800, 0, 0);
             TPLL = T;
             TPSB = HV;
+            NSA = 0;
+            NSB = 0;
 
             //CONDICIONES INICIALES
             Console.Write("Ingrese número de empleados Junior:\n");
@@ -60,10 +64,23 @@ namespace ConsoleApplication1
                         if (r < 0.8)
                         {
                             //JUNIOR
+                            if (NSA <= N)
+                            {
+                                NSA++;
+                                int j = buscarJunior();
+                                salidaA(j);
+                            }
+                            else {
+                                if (NSB==0)
+                                {
+                                    NSA--;
+                                    atiendeLider();
+                                }
+                            }
                         }
                         else
                         {
-                            //LIDER
+                            atiendeLider();
                         }
                     }
                     else {
@@ -103,6 +120,20 @@ namespace ConsoleApplication1
 
         }
 
+        private static int buscarJunior()
+        {
+            return Array.IndexOf(TPSA, HV);
+        }
+
+        private static void atiendeLider()
+        {
+            NSB++;
+            if (NSB==1)
+            {
+                salidaB();
+            }
+        }
+
         private static void eventoSalidaA()
         {
             T = TPSA[I];
@@ -110,21 +141,23 @@ namespace ConsoleApplication1
 
             if (NSA >= N)
             {
-                salidaA();
+                salidaA(I);
             }
             else {
                 TPSA[I] = HV;
             }
         }
 
-        private static void salidaA()
+        private static void salidaA(int x)
         {
-            throw new NotImplementedException();
+            TaA = calculoTaA();
+            TPSA[x] = T + TaA;
         }
 
         private static void salidaB()
         {
-            throw new NotImplementedException();
+            TaB = calculoTaB();
+            TPSB= T + TaB;
         }
 
         private static int menorTPSA()
@@ -137,6 +170,20 @@ namespace ConsoleApplication1
         {
             var rf = new Random().NextDouble();
             var x = Convert.ToInt32(rf * (60 + 5) - 5);
+            return new TimeSpan(0, x, 0);
+        }
+
+        private static TimeSpan calculoTaA()
+        {
+            var rf = new Random().NextDouble();
+            var x = Convert.ToInt32(rf * (60 + 5) - 5);
+            return new TimeSpan(0, x, 0);
+        }
+
+        private static TimeSpan calculoTaB()
+        {
+            var rf = new Random().NextDouble();
+            var x = Convert.ToInt32(rf * (30 + 10) - 10);
             return new TimeSpan(0, x, 0);
         }
 
