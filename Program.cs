@@ -29,6 +29,9 @@ namespace ConsoleApplication1
         public static TimeSpan ITOB { get; set; }
         public static TimeSpan[] STOA { get; set; }
         public static TimeSpan STOB { get; set; }
+        public static double STLL { get; set; }
+        public static double STS { get; set; }
+
         static void Main(string[] args)
         {
         while(true){
@@ -45,8 +48,9 @@ namespace ConsoleApplication1
 
             NT = 0;
             ITOB = new TimeSpan(0, 0, 0);
-            
             STOB = new TimeSpan(0, 0, 0);
+            STLL = 0;
+            STS = 0;
 
             //CONDICIONES INICIALES
             Console.Write("Ingrese número de empleados Junior:\n");
@@ -83,7 +87,10 @@ namespace ConsoleApplication1
             var PTOB = STOB.TotalDays / T.TotalDays * 100;
             Console.Write("Porcentaje de Tiempo Ocioso (Líder): " + PTOB + "%\n");
 
-            
+            Console.Write("STLL " + STLL+ "%\n");
+            Console.Write("STLL " + STS + "%\n");
+            var PPS = (STS - STLL) / NT;
+            Console.Write("PPS (Minutos): " + PPS+ "%\n");
             Console.ReadLine();
         }
         }
@@ -102,6 +109,7 @@ namespace ConsoleApplication1
                     //LLEGADA O SALIDA A
                     if (TPLL <= TPSA[I])
                     {
+                        STLL += TPLL.TotalDays;
                         NT++;
 
                         T = TPLL;
@@ -144,10 +152,13 @@ namespace ConsoleApplication1
                     //SALIDA A O B
                     if (TPSA[I] <= TPSB)
                     {
+                        STS += TPSA[I].TotalDays;
                         eventoSalidaA();
                     }
                     else
                     {
+                        STS += TPSB.TotalDays;
+
                         T = TPSB;
                         NSB--;
 
