@@ -27,7 +27,7 @@ namespace ConsoleApplication1
         public static int NT { get; set; }
         public static TimeSpan[] ITOA { get; set; }
         public static TimeSpan ITOB { get; set; }
-        public static TimeSpan STOA { get; set; }
+        public static TimeSpan[] STOA { get; set; }
         public static TimeSpan STOB { get; set; }
         static void Main(string[] args)
         {
@@ -45,7 +45,7 @@ namespace ConsoleApplication1
 
             NT = 0;
             ITOB = new TimeSpan(0, 0, 0);
-            STOA = new TimeSpan(0, 0, 0);
+            
             STOB = new TimeSpan(0, 0, 0);
 
             //CONDICIONES INICIALES
@@ -58,10 +58,12 @@ namespace ConsoleApplication1
 
             TPSA = new TimeSpan[N];
             ITOA = new TimeSpan[N];
+            STOA = new TimeSpan[N];
             for (int s = 0; s < N; s++)
             {
                 TPSA[s] = HV;
                 ITOA[s] = new TimeSpan(0, 0, 0);
+                STOA[s] = new TimeSpan(0, 0, 0);
             }
             //FIN CI
 
@@ -71,12 +73,16 @@ namespace ConsoleApplication1
             Console.Write(STOA + "\n");
             Console.Write(STOB + "\n");
 
-            var PTOA = STOA.TotalDays / T.TotalDays * 100;
+
+
+            for (int h = 0; h < N; h++)
+            {
+                var PTOA = STOA[h].TotalDays / T.TotalDays * 100;
+                Console.Write("Porcentaje de Tiempo Ocioso Junior " + h + ": " + PTOA + "%\n");
+            }
             var PTOB = STOB.TotalDays / T.TotalDays * 100;
-            var PTO = (STOB.TotalDays + STOA.TotalDays) / T.TotalDays * 100;
-            Console.Write("Porcentaje de Tiempo Ocioso (Juniors): " + PTOA + "%\n");
             Console.Write("Porcentaje de Tiempo Ocioso (Líder): " + PTOB + "%\n");
-            Console.Write("Porcentaje de Tiempo Ocioso Total: " + PTO + "%\n");
+
             
             Console.ReadLine();
         }
@@ -111,7 +117,7 @@ namespace ConsoleApplication1
                             if (NSA <= N)
                             {
                                 int j = buscarJunior();
-                                STOA = STOA + (T - ITOA[j]);
+                                STOA[j] = STOA[j] + (T - ITOA[j]);
                                 salidaA(j);
                             }
                             else
@@ -239,14 +245,14 @@ namespace ConsoleApplication1
         private static TimeSpan calculoIa()
         {
             var rf = new Random().NextDouble();
-            var x = Convert.ToInt32(rf * (30 + 0) - 0);
+            var x = Convert.ToInt32(rf * (20 + 0) - 0);
             return new TimeSpan(0, x, 0);
         }
 
         private static TimeSpan calculoTaA()
         {
             var rf = new Random().NextDouble();
-            var x = Convert.ToInt32(rf * (90 + 20) - 20);
+            var x = Convert.ToInt32(rf * (120 + 20) - 20);
             return new TimeSpan(0, x, 0);
         }
 
