@@ -42,7 +42,7 @@ namespace ConsoleApplication1
 
             llegadas = 0;
             salidas = 0;
-            Console.Clear();
+            Console.Write("\n");
             random = new Random();
             HV = new TimeSpan(239976, 0, 0);
             T = new TimeSpan(0, 0, 0);
@@ -81,24 +81,19 @@ namespace ConsoleApplication1
             
             };
 
-            Console.Write(T + "\n");
-            Console.Write(STOA + "\n");
-            Console.Write(STOB + "\n");
-
-
-
-            for (int h = 0; h < N; h++)
+           
+            for (int h = 1; h <= N; h++)
             {
-                var PTOA = STOA[h].TotalDays / T.TotalDays * 100;
-                Console.Write("Porcentaje de Tiempo Ocioso Junior " + h + ": " + PTOA + "%\n");
+                var PTOA = STOA[h-1].TotalDays / T.TotalDays * 100;
+                Console.Write("Porcentaje de Tiempo Ocioso Junior Puesto" + h  + ": " + PTOA + "%\n");
             }
             var PTOB = STOB.TotalDays / T.TotalDays * 100;
-            Console.Write("Porcentaje de Tiempo Ocioso (Líder): " + PTOB + "%\n");
+            Console.Write("Porcentaje de Tiempo Ocioso (Líder): " + PTOB + "%\n\n");
 
-            Console.Write("STLL " + STLL+ "\n");
-            Console.Write("STLL " + STS + "\n");
-            var PPS = (STS - STLL) / NT;
-            Console.Write("PPS (Minutos): " + PPS+ "%\n");
+            Console.Write("Sumatoria de tiempos de llegada: " + STLL+ "\n");
+            Console.Write("Sumatoria de tiempos de salida:  " + STS + "\n");
+            var PPS = ((STS - STLL) / NT)*1440;
+            Console.Write("Promedio de Permanencia en sistema: " + PPS+ " minutos\n");
             Console.ReadLine();
         }
         }
@@ -161,8 +156,7 @@ namespace ConsoleApplication1
                     //SALIDA A O B
                     if (TPSA[I] <= TPSB)
                     {
-                        STS = STS + TPSA[I].TotalDays;
-                        salidas++;
+
                         eventoSalidaA();
                     }
                     else
@@ -230,6 +224,9 @@ namespace ConsoleApplication1
 
         private static void eventoSalidaA()
         {
+            STS = STS + TPSA[I].TotalDays;
+            salidas++;
+
             T = TPSA[I];
             NSA--;
 
@@ -266,21 +263,21 @@ namespace ConsoleApplication1
         private static TimeSpan calculoIa()
         {
             var rf = new Random().NextDouble();
-            var x = Convert.ToInt32(rf * (20 + 0) - 0);
+            var x = Convert.ToInt32(rf * (30 - 10) + 10);
             return new TimeSpan(0, x, 0);
         }
 
         private static TimeSpan calculoTaA()
         {
             var rf = new Random().NextDouble();
-            var x = Convert.ToInt32(rf * (120 + 20) - 20);
+            var x = Convert.ToInt32(rf * (120 - 20) + 20);
             return new TimeSpan(0, x, 0);
         }
 
         private static TimeSpan calculoTaB()
         {
             var rf = new Random().NextDouble();
-            var x = Convert.ToInt32(rf * (60 + 10) - 10);
+            var x = Convert.ToInt32(rf * (60 - 10) + 10);
             return new TimeSpan(0, x, 0);
         }
 
