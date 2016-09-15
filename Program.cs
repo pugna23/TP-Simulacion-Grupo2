@@ -23,9 +23,17 @@ namespace ConsoleApplication1
         public static int NSB{ get; set; }
         public static int NSA { get; set; }
 
+        //VAR PARA RESULTADOS
+        public static int NT { get; set; }
+        public static TimeSpan[] ITOA { get; set; }
+        public static TimeSpan ITOB { get; set; }
+        public static TimeSpan STOA { get; set; }
+        public static TimeSpan STOB { get; set; }
         static void Main(string[] args)
         {
+        while(true){
             //VARIABLES GLOBALES:
+            Console.Clear();
             random = new Random();
             HV = new TimeSpan(239976, 0, 0);
             T = new TimeSpan(0, 0, 0);
@@ -35,26 +43,41 @@ namespace ConsoleApplication1
             NSA = 0;
             NSB = 0;
 
+            NT = 0;
+            ITOB = new TimeSpan(0, 0, 0);
+            STOA = new TimeSpan(0, 0, 0);
+            STOB = new TimeSpan(0, 0, 0);
+
             //CONDICIONES INICIALES
             Console.Write("Ingrese número de empleados Junior:\n");
+
             N = Convert.ToInt32(Console.ReadLine());
             Console.Write("Ingrese Duración de simulación en HORAS(recomendado: 10800):\n");
             int duracionSim =  Convert.ToInt32(Console.ReadLine());
             Tf = new TimeSpan(duracionSim, 0, 0);
 
             TPSA = new TimeSpan[N];
+            ITOA = new TimeSpan[N];
             for (int s = 0; s < N; s++)
             {
                 TPSA[s] = HV;
+                ITOA[s] = new TimeSpan(0, 0, 0);
             }
             //FIN CI
 
             ejecutarCiclo();
+
+            Console.Write(T + "\n");
+            Console.Write(STOA + "\n");
+            Console.Write(STOB + "\n");
+
+            var PTOA = STOA.TotalDays / T.TotalDays * 100;
+            var PTOB = STOB.TotalDays / T.TotalDays * 100;
+            Console.Write("Porcentaje de Tiempo Ocioso (Juniors): " + PTOA + "%\n");
+            Console.Write("Porcentaje de Tiempo Ocioso (Líder): " + PTOB + "%\n");
             
-
-
             Console.ReadLine();
-
+        }
         }
 
         private static void ejecutarCiclo()
@@ -71,6 +94,8 @@ namespace ConsoleApplication1
                     //LLEGADA O SALIDA A
                     if (TPLL <= TPSA[I])
                     {
+                        NT++;
+
                         T = TPLL;
                         Ia = calculoIa();
                         TPLL = T + Ia;
@@ -84,6 +109,7 @@ namespace ConsoleApplication1
                             if (NSA <= N)
                             {
                                 int j = buscarJunior();
+                                STOA = STOA + (T - ITOA[j]);
                                 salidaA(j);
                             }
                             else
@@ -131,6 +157,7 @@ namespace ConsoleApplication1
                             }
                             else
                             {
+                                ITOB = T;
                                 TPSB = HV;
                             }
                         }
@@ -167,6 +194,7 @@ namespace ConsoleApplication1
             NSB++;
             if (NSB==1)
             {
+                STOB = STOB + (T - ITOB);
                 salidaB();
             }
         }
@@ -181,18 +209,21 @@ namespace ConsoleApplication1
                 salidaA(I);
             }
             else {
+                ITOA[I] = T;
                 TPSA[I] = HV;
             }
         }
 
         private static void salidaA(int x)
         {
+            
             TaA = calculoTaA();
             TPSA[x] = T + TaA;
         }
 
         private static void salidaB()
         {
+            
             TaB = calculoTaB();
             TPSB= T + TaB;
         }
@@ -206,21 +237,21 @@ namespace ConsoleApplication1
         private static TimeSpan calculoIa()
         {
             var rf = new Random().NextDouble();
-            var x = Convert.ToInt32(rf * (60 + 5) - 5);
+            var x = Convert.ToInt32(rf * (30 + 0) - 0);
             return new TimeSpan(0, x, 0);
         }
 
         private static TimeSpan calculoTaA()
         {
             var rf = new Random().NextDouble();
-            var x = Convert.ToInt32(rf * (60 + 5) - 5);
+            var x = Convert.ToInt32(rf * (90 + 20) - 20);
             return new TimeSpan(0, x, 0);
         }
 
         private static TimeSpan calculoTaB()
         {
             var rf = new Random().NextDouble();
-            var x = Convert.ToInt32(rf * (30 + 10) - 10);
+            var x = Convert.ToInt32(rf * (60 + 10) - 10);
             return new TimeSpan(0, x, 0);
         }
 
