@@ -134,7 +134,7 @@ namespace ConsoleApplication1
                             }
                             else
                             {
-                                if (NSB == 0)
+                                if ((NSB == 0)&(NSA == N+1))
                                 {
                                     NSA--;
                                     atiendeLider();
