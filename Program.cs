@@ -32,10 +32,16 @@ namespace ConsoleApplication1
         public static double STLL { get; set; }
         public static double STS { get; set; }
 
+        public static long llegadas{ get; set; }
+        public static long salidas { get; set; }
+
         static void Main(string[] args)
         {
         while(true){
             //VARIABLES GLOBALES:
+
+            llegadas = 0;
+            salidas = 0;
             Console.Clear();
             random = new Random();
             HV = new TimeSpan(239976, 0, 0);
@@ -71,7 +77,9 @@ namespace ConsoleApplication1
             }
             //FIN CI
 
-            ejecutarCiclo();
+            while (ejecutarCiclo()) {
+            
+            };
 
             Console.Write(T + "\n");
             Console.Write(STOA + "\n");
@@ -87,15 +95,15 @@ namespace ConsoleApplication1
             var PTOB = STOB.TotalDays / T.TotalDays * 100;
             Console.Write("Porcentaje de Tiempo Ocioso (Líder): " + PTOB + "%\n");
 
-            Console.Write("STLL " + STLL+ "%\n");
-            Console.Write("STLL " + STS + "%\n");
+            Console.Write("STLL " + STLL+ "\n");
+            Console.Write("STLL " + STS + "\n");
             var PPS = (STS - STLL) / NT;
             Console.Write("PPS (Minutos): " + PPS+ "%\n");
             Console.ReadLine();
         }
         }
 
-        private static void ejecutarCiclo()
+        private static bool ejecutarCiclo()
         {
 
             do
@@ -109,7 +117,8 @@ namespace ConsoleApplication1
                     //LLEGADA O SALIDA A
                     if (TPLL <= TPSA[I])
                     {
-                        STLL += TPLL.TotalDays;
+                        STLL = STLL + TPLL.TotalDays;
+                        llegadas++;
                         NT++;
 
                         T = TPLL;
@@ -152,13 +161,14 @@ namespace ConsoleApplication1
                     //SALIDA A O B
                     if (TPSA[I] <= TPSB)
                     {
-                        STS += TPSA[I].TotalDays;
+                        STS = STS + TPSA[I].TotalDays;
+                        salidas++;
                         eventoSalidaA();
                     }
                     else
                     {
-                        STS += TPSB.TotalDays;
-
+                        STS = STS + TPSB.TotalDays;
+                        salidas++;
                         T = TPSB;
                         NSB--;
 
@@ -190,15 +200,15 @@ namespace ConsoleApplication1
                 if (NSB != 0)
                 {
                     TPLL = HV;
-                    ejecutarCiclo();
+                    return true;
                 }
             }
             else
             {
                 TPLL = HV;
-                ejecutarCiclo();
+                return true;
             }
-
+            return false;
         }
 
 
