@@ -27,9 +27,9 @@ namespace ConsoleApplication1
         {
             //VARIABLES GLOBALES:
             random = new Random();
-            HV = new TimeSpan(23976,0,0);
+            HV = new TimeSpan(239976, 0, 0);
             T = new TimeSpan(0, 0, 0);
-            Tf = new TimeSpan(10800, 0, 0);
+            
             TPLL = T;
             TPSB = HV;
             NSA = 0;
@@ -38,6 +38,9 @@ namespace ConsoleApplication1
             //CONDICIONES INICIALES
             Console.Write("Ingrese número de empleados Junior:\n");
             N = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Ingrese Duración de simulación en HORAS(recomendado: 10800):\n");
+            int duracionSim =  Convert.ToInt32(Console.ReadLine());
+            Tf = new TimeSpan(duracionSim, 0, 0);
 
             TPSA = new TimeSpan[N];
             for (int s = 0; s < N; s++)
@@ -48,14 +51,7 @@ namespace ConsoleApplication1
 
             ejecutarCiclo();
             
-            //VACIAMIENTO
-            if (NSA==0)
-            {
-                if (NSB==0)
-                {
-                    TPLL = HV;
-                }
-            }
+
 
             Console.ReadLine();
 
@@ -64,9 +60,9 @@ namespace ConsoleApplication1
         private static void ejecutarCiclo()
         {
 
-
-            while (T < Tf)
+            do
             {
+
                 I = menorTPSA();
 
                 //LLEGADA O SALIDA
@@ -85,7 +81,7 @@ namespace ConsoleApplication1
                             //JUNIOR
                             NSA++;
 
-                            if (NSA < N)
+                            if (NSA <= N)
                             {
                                 int j = buscarJunior();
                                 salidaA(j);
@@ -140,7 +136,23 @@ namespace ConsoleApplication1
                         }
                     }
                 }
+            } while (T < Tf);
+
+            //VACIAMIENTO
+            if (NSA == 0)
+            {
+                if (NSB != 0)
+                {
+                    TPLL = HV;
+                    ejecutarCiclo();
+                }
             }
+            else
+            {
+                TPLL = HV;
+                ejecutarCiclo();
+            }
+
         }
 
 
