@@ -73,8 +73,10 @@ namespace ConsoleApplication1
 
             var PTOA = STOA.TotalDays / T.TotalDays * 100;
             var PTOB = STOB.TotalDays / T.TotalDays * 100;
+            var PTO = (STOB.TotalDays + STOA.TotalDays) / T.TotalDays * 100;
             Console.Write("Porcentaje de Tiempo Ocioso (Juniors): " + PTOA + "%\n");
             Console.Write("Porcentaje de Tiempo Ocioso (Líder): " + PTOB + "%\n");
+            Console.Write("Porcentaje de Tiempo Ocioso Total: " + PTO + "%\n");
             
             Console.ReadLine();
         }
